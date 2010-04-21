@@ -52,7 +52,5 @@ module Rektive
     #   @@redis = Redis.new
     #   @@class = child
     # end
-  
-
-
+  end
 end
