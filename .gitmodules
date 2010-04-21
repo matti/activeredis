@@ -4,6 +4,3 @@
 [submodule "redis-rb"]
 	path = redis-rb
 	url = git://github.com/ezmobius/redis-rb.git
-[submodule "rails"]
-	path = rails
-	url = git://github.com/rails/rails.git
