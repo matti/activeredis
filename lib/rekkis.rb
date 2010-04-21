@@ -1,21 +1,17 @@
-
 # to be aware of rails & stuff
 require 'rubygems'
 
 # latest stuff!
 Dir.chdir('redis-rb/lib') do
-	require 'redis'
+  require 'redis'
 end
 
 # Rails 3.0.0-beta needs to be installed
 require 'active_model'
 
-
 module Rektive
-  
   class Base
-
-	  include ActiveModel::Validations
+    include ActiveModel::Validations
     include ActiveModel::Dirty
     include ActiveModel::Serialization
     include ActiveModel::Serializers::JSON
@@ -42,10 +38,7 @@ module Rektive
     #  --> initialize stringifies
     #
     #  called by to_json for_example
-    
-    def attributes
-      @attributes
-    end
+    attr_reader :attributes
     
     
     # def self.inherited(child)
