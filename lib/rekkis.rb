@@ -9,7 +9,7 @@ end
 # Rails 3.0.0-beta needs to be installed
 require 'active_model'
 
-module Rektive
+module Rekkis
   class Base
     include ActiveModel::Validations
     include ActiveModel::Dirty
