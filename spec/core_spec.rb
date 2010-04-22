@@ -9,6 +9,11 @@ describe Cat do
     Cat.ancestors.should include(Rekkis::Base)
   end
   
+  it "should give out info on the redis server" do
+    Cat.redis_information.should be_an_instance_of(Hash)
+    Cat.redis_information[:uptime_in_days].should == "0"
+  end
+
   describe "attributes" do
     before(:each) do
       @cat = Cat.new(:name => "lol")

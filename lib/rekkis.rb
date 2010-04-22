@@ -41,9 +41,13 @@ module Rekkis
     attr_reader :attributes
     
     
-    # def self.inherited(child)
-    #   @@redis = Redis.new
-    #   @@class = child
-    # end
+    def self.inherited(child)
+      @@redis = Redis.new
+      @@class = child
+    end
+    
+    def self.redis_information
+      @@redis.info # call_command [:info]
+    end
   end
 end
