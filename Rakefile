@@ -30,6 +30,10 @@ namespace :redis do
 
   desc "Start the Redis server"
   task :start do
+    unless File.exists?("redis/redis-server")
+      puts "You need to build redis first! use redis:build task first."
+      raise "You need to build redis first! use redis:build task first."
+    end
     unless File.exists?(REDIS_PID)
       system "redis/redis-server #{REDIS_CNF}"
       puts "Started redis server with pid #{File.read(REDIS_PID)}"
