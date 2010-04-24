@@ -1,12 +1,12 @@
-require 'lib/rekkis'
+require 'lib/active_redis'
 
-class Cat < Rekkis::Base
+class Cat < ActiveRedis::Base
   
 end
 
 describe Cat do
   it "should be a rektive model" do
-    Cat.ancestors.should include(Rekkis::Base)
+    Cat.ancestors.should include(ActiveRedis::Base)
   end
   
   it "should give out info on the redis server" do
