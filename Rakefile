@@ -14,7 +14,7 @@ end
 
 desc "Open console with redis support"
 task :console do
-  sh "irb --simple-prompt -rubygems -I redis-rb/lib -r redis -r active_model"
+  sh "irb --simple-prompt -rubygems -I redis-rb/lib -r redis -r active_model -r lib/active_redis"
 end
 
 namespace :spec do
