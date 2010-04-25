@@ -94,7 +94,7 @@ module ActiveRedis
     end
     
     def self.redis_information
-      @@redis.info # call_command [:info]
+      connection.info # call_command [:info]
     end
     
     def self.connection
@@ -103,7 +103,7 @@ module ActiveRedis
 
     def self.count
       begin
-        return @@redis.zcard "#{key_namespace}:all"
+        return connection.zcard "#{key_namespace}:all"
       rescue RuntimeError => e
         return 0
       end
