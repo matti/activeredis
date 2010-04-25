@@ -24,6 +24,7 @@ module ActiveRedis
     #
     #  called by to_json for_example
     attr_reader :attributes
+    attr_reader :id
     
     # INSTANCE METHODS
     
@@ -38,10 +39,39 @@ module ActiveRedis
           end
         end
       end
+    end
+
+    def save
+      @id = self.class.fetch_new_identifier
       
+      attributes.each_pair do |key, value|
+        connection.hset("#{key_namespace}:attributes", "#{key}", value)
+      end
+      
+      return true
+    end
+    
+    def key_namespace
+      "#{self.class.key_namespace}:#{self.id}"
+    end
+    
+    def connection
+      self.class.connection
     end
     
     # CLASS METHODS
+    
+    def self.key_namespace
+      "#{self}"
+    end
+    
+    def self.fetch_new_identifier
+      self.connection.incr self.identifier_sequencer
+    end
+    
+    def self.identifier_sequencer
+      "#{key_namespace}:sequence"
+    end
     
     def self.inherited(child)
       @@redis = Redis.new
@@ -52,6 +82,10 @@ module ActiveRedis
       @@redis.info # call_command [:info]
     end
     
+    def self.connection
+      @@redis
+    end
+
     def self.count
       begin
         return @@redis.zcard "#{self.name}:all"
@@ -64,6 +98,5 @@ module ActiveRedis
       attributes = @@redis.hgetall "#{self.name}:#{id}:attrs"
       return nil if attributes == {}      
     end
-    
   end
 end
