@@ -51,7 +51,8 @@ describe Cat do
   
   describe "persisting simple objects" do
     before(:each) do
-      @cat = Cat.new(:name => "lol")
+      @cat = Cat.new(:name => "lol",
+                     :color => "white")
     end
     
     it "should persist a simple object successfully" do
@@ -76,7 +77,11 @@ describe Cat do
     
     it "should persist the attributes of the object" do
       Cat.stub!(:fetch_new_identifier).and_return(1)
-      Cat.connection.should_receive(:hset).with("#{Cat.key_namespace}:1:attributes", "name", "lol").and_return(true)
+
+      Cat.connection.should_receive(:call_command).with([ "hmset",
+                                                          "#{Cat.key_namespace}:1:attributes",
+                                                          "name", "lol",
+                                                          "color", "white"]).and_return(true)
       
       @cat.save
     end

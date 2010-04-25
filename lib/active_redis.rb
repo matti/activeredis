@@ -42,11 +42,10 @@ module ActiveRedis
     end
 
     def save
-      @id = self.class.fetch_new_identifier
-      
-      attributes.each_pair do |key, value|
-        connection.hset("#{key_namespace}:attributes", "#{key}", value)
-      end
+      attributes_array = attributes.to_a.flatten
+
+      @id = self.class.fetch_new_identifier      
+      connection.call_command(["hmset", "#{key_namespace}:attributes"] + attributes_array)
       
       return true
     end
