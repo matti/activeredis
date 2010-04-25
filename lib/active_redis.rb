@@ -47,7 +47,10 @@ module ActiveRedis
 
       @id = self.class.fetch_new_identifier
       
-      connection.call_command(["hmset", "#{key_namespace}:attributes"] + attributes_array)
+      if attributes_array.size > 0  
+        connection.call_command(["hmset", "#{key_namespace}:attributes"] + attributes_array)
+      end
+      
       connection.zadd("#{class_namespace}:all", @id, @id)
       
       return true
@@ -101,9 +104,11 @@ module ActiveRedis
     end
 
     def self.find(id)
-      attributes = @@redis.hgetall "#{key_namespace}:#{id}:attributes"
-      return nil if attributes.nil? || attributes == {}
+      exists = connection.zscore "#{key_namespace}:all", id
+      return nil unless exists
       
+      attributes = connection.hgetall "#{key_namespace}:#{id}:attributes"
+            
       obj = self.new attributes, id
       
       return obj

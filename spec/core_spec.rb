@@ -85,6 +85,16 @@ describe Cat do
       
       @cat.save
     end
+    
+    it "should persist attributeless cat" do
+      attributeless = Cat.new
+      attributeless.save
+      
+      attributeless.id.should_not be_nil
+    end
+    
+    
+    
   end
 
   describe "find" do
@@ -94,9 +104,16 @@ describe Cat do
       no_such_cat.should be_nil    
     end
     
-    it "should" do
-      Cat.connection.should_receive(:hgetall).with("#{Cat.key_namespace}:99:attributes")                                                         
-      Cat.find(99)
+    it "should check that object exists in all" do
+      Cat.connection.should_receive(:zscore).with("#{Cat.key_namespace}:all", 1)
+      Cat.find(1)
+    end
+    
+    it "should load all attributes" do
+      Cat.connection.stub!(:zscore).and_return(1)
+      
+      Cat.connection.should_receive(:hgetall).with("#{Cat.key_namespace}:1:attributes").and_return({})                                                    
+      Cat.find(1)
     end
     
     it "should find existing cat" do
@@ -112,5 +129,13 @@ describe Cat do
       existing_cat = Cat.find(1)
       existing_cat.id.should == 1
     end
+
+    it "should find attributeless cat" do
+      attributeless = Cat.new
+      attributeless.save
+
+      Cat.find(attributeless.id).should_not be_nil
+    end
+
   end
 end
