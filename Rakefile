@@ -3,7 +3,14 @@ require 'spec/rake/spectask'
 task :default => :spec
 
 desc "Run tests and manage server start/stop"
-task :spec => ["redis:start", "spec:run", "redis:stop"]
+task :spec do
+  Rake::Task["redis:start"].invoke
+  begin
+    Rake::Task["spec:run"].invoke
+  ensure
+    Rake::Task["redis:stop"].invoke
+  end
+end
 
 namespace :spec do
   desc "Run all specs in spec directory (excluding plugin specs)"

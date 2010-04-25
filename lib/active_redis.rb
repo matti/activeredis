@@ -17,6 +17,15 @@ module ActiveRedis
     include ActiveModel::Serializers::JSON
     include ActiveModel::Naming
     
+    # RAILSISM
+    # Returns a hash of all the attributes with their names as keys and the values of the attributes as values
+    #  --> means: Strings as keys!
+    #  --> initialize stringifies
+    #
+    #  called by to_json for_example
+    attr_reader :attributes
+    
+    # INSTANCE METHODS
     
     def initialize(attributes = {})
       attributes.stringify_keys!   # NEEDS to be strings for railsisms
@@ -32,14 +41,7 @@ module ActiveRedis
       
     end
     
-    # RAILSISM
-    # Returns a hash of all the attributes with their names as keys and the values of the attributes as values
-    #  --> means: Strings as keys!
-    #  --> initialize stringifies
-    #
-    #  called by to_json for_example
-    attr_reader :attributes
-    
+    # CLASS METHODS
     
     def self.inherited(child)
       @@redis = Redis.new
