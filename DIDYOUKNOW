@@ -6,3 +6,5 @@
   [..clip..]
   >> r.set 'Test', 1
   => "OK"
+
+- Calling ZCARD on key that exists returns error.
