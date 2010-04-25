@@ -138,4 +138,26 @@ describe Cat do
     end
 
   end
+  
+  describe "update" do
+    
+    it "should not create new objects when updating" do
+      same_cat = Cat.new
+      same_cat.save
+      id_before_save = same_cat.id
+      
+      same_cat.save
+      same_cat.id.should == id_before_save
+    end
+    
+  end
+  
+  
+  describe "ActiveModel compatibility" do
+  
+    it "should respond to new_record?" do
+      Cat.new.new_record?.should == true
+    end
+  end
+  
 end
