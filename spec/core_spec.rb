@@ -88,9 +88,24 @@ describe Cat do
   end
 
   describe "find" do
+    
     it "should return nil if record was not found" do
-      no_such_cat = Cat.find(1)
+      no_such_cat = Cat.find(99)
       no_such_cat.should be_nil    
+    end
+    
+    it "should" do
+      Cat.connection.should_receive(:hgetall).with("#{Cat.key_namespace}:99:attributes")                                                         
+      Cat.find(99)
+    end
+    
+    it "should find existing cat" do
+      attributes_to_persist = {"fur" => "long", "eyes" => "blue"}
+      c = Cat.new attributes_to_persist
+      c.save
+      
+      same_cat = Cat.find(c.id)
+      same_cat.attributes.should == attributes_to_persist
     end
   end
 end

@@ -94,8 +94,10 @@ module ActiveRedis
     end
 
     def self.find(id)
-      attributes = @@redis.hgetall "#{self.name}:#{id}:attrs"
-      return nil if attributes == {}      
+      attributes = @@redis.hgetall "#{key_namespace}:#{id}:attributes"
+      return nil if attributes.nil? || attributes == {}
+      
+      Cat.new attributes
     end
   end
 end
