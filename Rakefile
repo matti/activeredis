@@ -12,6 +12,11 @@ task :spec do
   end
 end
 
+desc "Open console with redis support"
+task :console do
+  sh "irb --simple-prompt -rubygems -I redis-rb/lib -r redis -r active_model"
+end
+
 namespace :spec do
   desc "Run all specs in spec directory (excluding plugin specs)"
   Spec::Rake::SpecTask.new(:run) do |t|
