@@ -5,6 +5,11 @@ class Cat < ActiveRedis::Base
 end
 
 describe Cat do
+
+  before(:each) do
+    @cat = Cat.new(:name => "lol")
+  end
+
   it "should be a rektive model" do
     Cat.ancestors.should include(ActiveRedis::Base)
   end
@@ -14,14 +19,21 @@ describe Cat do
     Cat.redis_information[:uptime_in_days].should == "0"
   end
   
-  it "should know count of its objects when empty" do
-    Cat.count.should == 0
-  end
-
-  describe "attributes" do
-    before(:each) do
-      @cat = Cat.new(:name => "lol")
+  describe "counting" do
+    it "should know count of its objects when empty" do
+      Cat.count.should == 0
     end
+
+    # Waiting for object persisting
+    it "should know count of its objects" 
+    # do
+    #   @cat.save
+    #   Cat.count.should == 1
+    # end
+    
+  end
+  
+  describe "attributes" do
     
     it "should have attributes" do
       @cat.attributes.should include("name")

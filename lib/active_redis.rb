@@ -54,7 +54,7 @@ module ActiveRedis
     
     def self.count
       begin
-        @@redis.zcard "#{self.name}:all"
+        return @@redis.zcard "#{self.name}:all"
       rescue RuntimeError => e
         return 0
       end
