@@ -45,4 +45,14 @@ describe Cat do
         
   end
   
+  describe "find" do
+    
+    it "should return nil if record was not found" do
+      no_such_cat = Cat.find(1)
+      no_such_cat.should be_nil    
+    end
+    
+    
+  end
+
 end
