@@ -28,10 +28,11 @@ module ActiveRedis
     
     # INSTANCE METHODS
     
-    def initialize(attributes = {})
+    def initialize(attributes = {}, id = nil)
       attributes.stringify_keys!   # NEEDS to be strings for railsisms
       @attributes = attributes
-     
+      @id = id if id
+      
       (class << self; self; end).class_eval do
          attributes.each_pair do |key, value|
           define_method key.to_sym do
@@ -44,7 +45,7 @@ module ActiveRedis
     def save
       attributes_array = attributes.to_a.flatten
 
-      @id = self.class.fetch_new_identifier      
+      @id = self.class.fetch_new_identifier
       connection.call_command(["hmset", "#{key_namespace}:attributes"] + attributes_array)
       
       return true
@@ -97,7 +98,9 @@ module ActiveRedis
       attributes = @@redis.hgetall "#{key_namespace}:#{id}:attributes"
       return nil if attributes.nil? || attributes == {}
       
-      Cat.new attributes
+      obj = self.new attributes, id
+      
+      return obj
     end
   end
 end

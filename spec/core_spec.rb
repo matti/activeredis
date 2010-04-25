@@ -107,5 +107,10 @@ describe Cat do
       same_cat = Cat.find(c.id)
       same_cat.attributes.should == attributes_to_persist
     end
+    
+    it "should have id set" do
+      existing_cat = Cat.find(1)
+      existing_cat.id.should == 1
+    end
   end
 end
