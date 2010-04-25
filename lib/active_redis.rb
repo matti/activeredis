@@ -46,13 +46,19 @@ module ActiveRedis
       attributes_array = attributes.to_a.flatten
 
       @id = self.class.fetch_new_identifier
+      
       connection.call_command(["hmset", "#{key_namespace}:attributes"] + attributes_array)
+      connection.zadd("#{class_namespace}:all", @id, @id)
       
       return true
     end
     
     def key_namespace
       "#{self.class.key_namespace}:#{self.id}"
+    end
+    
+    def class_namespace
+      "#{self.class.key_namespace}"
     end
     
     def connection
@@ -88,7 +94,7 @@ module ActiveRedis
 
     def self.count
       begin
-        return @@redis.zcard "#{self.name}:all"
+        return @@redis.zcard "#{key_namespace}:all"
       rescue RuntimeError => e
         return 0
       end

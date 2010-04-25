@@ -28,12 +28,10 @@ describe Cat do
       Cat.count.should == 0
     end
 
-    # Waiting for object persisting
-    it "should know count of its objects" 
-    # do
-    #   @cat.save
-    #   Cat.count.should == 1
-    # end
+    it "should know count of its objects" do
+       @cat.save
+       Cat.count.should == 1
+    end
     
   end
   
@@ -82,6 +80,8 @@ describe Cat do
                                                           "#{Cat.key_namespace}:1:attributes",
                                                           "name", "lol",
                                                           "color", "white"]).and_return(true)
+
+      Cat.connection.should_receive(:zadd).with("#{Cat.key_namespace}:all", 1, 1).and_return(true)
       
       @cat.save
     end
