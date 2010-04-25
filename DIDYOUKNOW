@@ -1,1 +1,8 @@
 - if you call incr on a key that does not exist, you wont get 1 but 2164330620
+
+- Ruby-wrapper wants all Redis-commands lowercase, otherwise it will Timeout 
+  >> r.SET 'Test', 1
+  r.set 'Peke',1Errno::EAGAIN: Resource temporarily unavailable - Timeout reading from the socket
+  [..clip..]
+  >> r.set 'Test', 1
+  => "OK"
