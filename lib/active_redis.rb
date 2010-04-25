@@ -51,5 +51,14 @@ module ActiveRedis
     def self.redis_information
       @@redis.info # call_command [:info]
     end
+    
+    def self.count
+      begin
+        @@redis.zcard "#{self.name}:all"
+      rescue RuntimeError => e
+        return 0
+      end
+    end
+    
   end
 end

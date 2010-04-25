@@ -13,6 +13,10 @@ describe Cat do
     Cat.redis_information.should be_an_instance_of(Hash)
     Cat.redis_information[:uptime_in_days].should == "0"
   end
+  
+  it "should know count of its objects when empty" do
+    Cat.count.should == 0
+  end
 
   describe "attributes" do
     before(:each) do
@@ -26,5 +30,7 @@ describe Cat do
     it "should have accessors for all attributes" do
       @cat.name.should == "lol"
     end
+        
   end
+  
 end
