@@ -188,6 +188,19 @@ describe Cat do
       same_cat.id.should == id_before_save
     end
     
+    it "should update attribute with new value" do
+      
+      @cat.save
+      
+      new_name = "updated lolcat"
+      @cat.name = new_name 
+      @cat.save
+      Cat.find(@cat.id).name.should == new_name
+      
+    end
+    
+    
+    
   end
   
   

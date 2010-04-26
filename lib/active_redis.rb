@@ -42,9 +42,12 @@ module ActiveRedis
       @id = id if id
       
       (class << self; self; end).class_eval do
-         attributes.each_pair do |key, value|
+        attributes.each_pair do |key, value|
           define_method key.to_sym do
              value.to_s
+          end
+          define_method "#{key}=".to_sym do |new_value|
+            @attributes["#{key}"] = new_value.to_s
           end
         end
       end
