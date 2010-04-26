@@ -8,3 +8,8 @@
   => "OK"
 
 - Calling ZCARD on key that does not exists returns ERR
+
+- ActiveModel is missing ActiveRecord's Exception classes
+  http://github.com/rails/rails/blob/master/activerecord/lib/active_record/errors.rb
+  
+  

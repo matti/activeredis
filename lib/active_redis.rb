@@ -10,6 +10,14 @@ end
 require 'active_model'
 
 module ActiveRedis
+  
+  class ActiveRedisError < StandardError
+  end
+  
+  # Raised when Active Redis cannot find record by given id or set of ids.
+  class RecordNotFound < ActiveRedisError
+  end
+  
   class Base
     include ActiveModel::Validations
     include ActiveModel::Dirty
@@ -77,6 +85,16 @@ module ActiveRedis
       self.class.connection
     end
     
+    def delete
+      connection.multi do
+        connection.del "#{key_namespace}:attributes"
+        connection.zrem "#{class_namespace}:all", @id
+      end
+      
+      return true
+      
+    end
+    
     # CLASS METHODS
     
     def self.key_namespace
@@ -114,7 +132,7 @@ module ActiveRedis
 
     def self.find(id)
       exists = connection.zscore "#{key_namespace}:all", id
-      return nil unless exists
+      raise RecordNotFound.new("Couldn't find #{self.name} with ID=#{id}") unless exists
       
       attributes = connection.hgetall "#{key_namespace}:#{id}:attributes"
             

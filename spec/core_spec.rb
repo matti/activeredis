@@ -111,15 +111,39 @@ describe Cat do
     
   end
 
+  describe "deletion" do
+    it "object should remove itself" do
+      @cat.save
+      
+      @cat.delete.should == true
+      lambda {
+        Cat.find(@cat.id)
+      }.should raise_error(ActiveRedis::RecordNotFound)
+
+    end
+    
+    it "should delete as an atomic operation" do
+      dead_cat = Cat.new({}, 1)
+      Cat.connection.should_receive(:multi).and_yield
+      Cat.connection.should_receive(:del).with("#{Cat.key_namespace}:1:attributes").and_return(10)
+      Cat.connection.should_receive(:zrem).with("#{Cat.key_namespace}:all", 1).and_return(1)
+      dead_cat.delete.should == true
+    end
+    
+  end
+  
   describe "find" do
     
-    it "should return nil if record was not found" do
-      no_such_cat = Cat.find(99)
-      no_such_cat.should be_nil    
+    it "should raise error if record was not found" do
+      no_such_cat_id = 99
+      lambda { 
+        Cat.find(no_such_cat_id)
+      }.should raise_error(ActiveRedis::RecordNotFound)
+      
     end
     
     it "should check that object exists in all" do
-      Cat.connection.should_receive(:zscore).with("#{Cat.key_namespace}:all", 1)
+      Cat.connection.should_receive(:zscore).with("#{Cat.key_namespace}:all", 1).and_return(true)
       Cat.find(1)
     end
     
