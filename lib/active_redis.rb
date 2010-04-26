@@ -47,13 +47,16 @@ module ActiveRedis
       creation = new_record?
       
       @id = self.class.fetch_new_identifier if creation
-      
-      if attributes_array.size > 0  
-        connection.call_command(["hmset", "#{key_namespace}:attributes"] + attributes_array)
+
+      connection.multi do
+
+        if attributes_array.size > 0  
+          connection.call_command(["hmset", "#{key_namespace}:attributes"] + attributes_array)
+        end
+
+        connection.zadd("#{class_namespace}:all", @id, @id) 
+        
       end
-    
-      # NOTE: race condition: if being deleted at the same time, we need to set this EVERY time!
-      connection.zadd("#{class_namespace}:all", @id, @id) 
             
       return true
     end
