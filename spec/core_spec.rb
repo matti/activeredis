@@ -80,7 +80,7 @@ describe Cat do
     
     it "should persist the attributes of the object" do
       Cat.stub!(:fetch_new_identifier).and_return(1)
-      Cat.connection.should_receive(:multi).and_yield
+      Cat.connection.stub!(:multi).and_yield
 
       Cat.connection.should_receive(:call_command).with([ "hmset",
                                                           "#{Cat.key_namespace}:1:attributes",
