@@ -91,8 +91,7 @@ module ActiveRedis
         connection.zrem "#{class_namespace}:all", @id
       end
       
-      return true
-      
+      return true     
     end
     
     # CLASS METHODS
