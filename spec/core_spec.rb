@@ -49,7 +49,47 @@ describe Cat do
       numeric_cat = Cat.new(:age => 25, :length => 5.4)
       numeric_cat.age.should == "25"
       numeric_cat.length.should == "5.4"
-    end   
+    end
+    
+    it "should add a new attribute to a persisted object" do
+      @cat.save
+      @cat.add_attribute(:color)
+      @cat.color.should == ""
+    end
+
+    it "should add a new attribute with empty value and persist changes" do
+      @cat.save
+      @cat.add_attribute(:color)
+      @cat.color.should == ""
+      @cat.save
+      Cat.find(@cat.id).color.should == ""
+    end
+
+    it "should add a new attribute with non-empty value and persist changes" do
+      @cat.save
+      @cat.add_attribute(:color, "black")
+      @cat.color.should == "black"
+      @cat.save
+      Cat.find(@cat.id).color.should == "black"
+    end
+    
+    it "should add a new attribute with a value" do
+      @cat.add_attribute(:color, "black")
+      @cat.color.should == "black"
+    end
+    
+    it "should add a new attribute to a non-persisted object" do
+      cat = Cat.new(:name => "long")
+      cat.add_attribute(:length, 2.5)
+      cat.length.should == "2.5"
+    end
+    
+    it "should convert attribute values to string when creating new" do
+      cat = Cat.new(:age => 2.5, :long => true, :length => 100)
+      cat.attributes["age"].should == "2.5"
+      cat.attributes["long"].should == "true"
+      cat.attributes["length"].should == "100"
+    end
   end
   
   describe "persisting simple objects" do

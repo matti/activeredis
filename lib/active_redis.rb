@@ -37,14 +37,22 @@ module ActiveRedis
     # INSTANCE METHODS
     
     def initialize(attributes = {}, id = nil)
-      attributes.stringify_keys!   # NEEDS to be strings for railsisms
-      @attributes = attributes
       @id = id if id
-      
+      @attributes = {}
+      initialize_attributes(attributes)
+    end
+    
+    # Object's attributes' keys are converted to strings because of railsisms.
+    # Because of activeredisism, also values are converted to strings for consistency.
+    def initialize_attributes(attributes)
+      attributes.stringify_keys!   # NEEDS to be strings for railsisms
+      attributes.each_pair { |key, value| attributes[key] = value.to_s }
+      @attributes.merge!(attributes)
+
       (class << self; self; end).class_eval do
         attributes.each_pair do |key, value|
           define_method key.to_sym do
-             value.to_s
+            value
           end
           define_method "#{key}=".to_sym do |new_value|
             @attributes["#{key}"] = new_value.to_s
@@ -95,6 +103,10 @@ module ActiveRedis
       end
       
       return true     
+    end
+    
+    def add_attribute(name, value=nil)
+      initialize_attributes({name => value})
     end
     
     # CLASS METHODS
