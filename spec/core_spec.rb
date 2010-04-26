@@ -44,7 +44,12 @@ describe Cat do
     it "should have accessors for all attributes" do
       @cat.name.should == "lol"
     end
-        
+     
+    it "should stringify all values" do
+      numeric_cat = Cat.new(:age => 25, :length => 5.4)
+      numeric_cat.age.should == "25"
+      numeric_cat.length.should == "5.4"
+    end   
   end
   
   describe "persisting simple objects" do

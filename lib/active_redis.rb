@@ -36,7 +36,7 @@ module ActiveRedis
       (class << self; self; end).class_eval do
          attributes.each_pair do |key, value|
           define_method key.to_sym do
-             value
+             value.to_s
           end
         end
       end
