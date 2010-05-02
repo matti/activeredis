@@ -1,3 +1,4 @@
+require 'spec/spec_helper'
 require 'lib/active_redis'
 
 class Cat < ActiveRedis::Base
@@ -204,6 +205,8 @@ describe Cat do
     end
     
     it "should have id set" do
+      @cat.save
+      
       existing_cat = Cat.find(1)
       existing_cat.id.should == 1
     end
