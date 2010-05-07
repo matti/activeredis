@@ -2,6 +2,19 @@
 
 ActiveModel based object persisting library for [Redis](http://code.google.com/p/redis) key-value database.
 
+## Features
+
+* ActiveModel compatibility
+* Race condition free operations
+
+## Missing features
+
+A lot. ActiveRedis is currently designed to handle concurrency issues.  Use [OHM](http://ohm.keyvalue.org/) or [remodel](http://github.com/tlossen/remodel) if you need advanced features and can accept some potential concurrency issues.
+
+* Indexes
+* Relations
+* Other cool stuff
+
 ## How to start
 
 1. Clone the repository
@@ -30,4 +43,4 @@ Check [Persisting Objects in Redis Key-Value Database](http://www.cs.helsinki.fi
 
 Pull requests are welcome!
 
-For any questions contact [matti.pasula@cs.helsinki.fi](mailto:matti.pasula@cs.helsinki.fi)
+For any questions contact [matti.paksula@cs.helsinki.fi](mailto:matti.paksula@cs.helsinki.fi)
